@@ -4,22 +4,23 @@
  * Module dependencies.
  */
 
-var app = require('../app');
-var debug = require('debug')('stock-service:server');
-var http = require('http');
+import app from '../app';
+import debugModule from 'debug';
+import * as http from 'http';
+
+const debug = debugModule('api-service:server');
 
 /**
  * Get port from environment and store in Express.
  */
-
-var port = normalizePort(process.env.PORT || '3002');
+const port: string | number | false = normalizePort(process.env.PORT || '3002');
 app.set('port', port);
 
 /**
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+const server: http.Server = http.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -33,8 +34,8 @@ server.on('listening', onListening);
  * Normalize a port into a number, string, or false.
  */
 
-function normalizePort(val) {
-  var port = parseInt(val, 10);
+function normalizePort(val: string): string | number | false {
+  const port: number = parseInt(val, 10);
 
   if (isNaN(port)) {
     // named pipe
@@ -43,6 +44,7 @@ function normalizePort(val) {
 
   if (port >= 0) {
     // port number
+    console.log("Listening on Stock Server port ", port);
     return port;
   }
 
@@ -53,12 +55,12 @@ function normalizePort(val) {
  * Event listener for HTTP server "error" event.
  */
 
-function onError(error) {
+function onError(error: NodeJS.ErrnoException): void {
   if (error.syscall !== 'listen') {
     throw error;
   }
 
-  var bind = typeof port === 'string'
+  const bind: string = typeof port === 'string'
     ? 'Pipe ' + port
     : 'Port ' + port;
 
@@ -81,10 +83,10 @@ function onError(error) {
  * Event listener for HTTP server "listening" event.
  */
 
-function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
+function onListening(): void {
+  const addr = server.address();
+  const bind: string = typeof addr === 'string'
     ? 'pipe ' + addr
-    : 'port ' + addr.port;
+    : 'port ' + addr?.port;
   debug('Listening on ' + bind);
 }

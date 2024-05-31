@@ -1,0 +1,33 @@
+version: '3'
+services:
+  nodejs-apiservice:
+    build: 
+      context: .
+      dockerfile: api-service/Dockerfile
+    image: nodejs-apiservice
+    container_name: nodejs-apiservice
+    entrypoint: /usr/src/app/entrypoint.sh
+    ports:
+      - "3000:3001"
+    volumes:
+      - ./api-service:/usr/src/app
+    networks:
+      - nginx_network
+  
+  nodejs-stockservice:
+    build: 
+      context: .
+      dockerfile: stock-service/Dockerfile
+    image: nodejs-stockservice
+    container_name: nodejs-stockservice
+    entrypoint: /usr/src/app/entrypoint.sh
+    ports:
+      - "3002:3002"
+    volumes:
+      - ./stock-service:/usr/src/app
+    networks:
+      - nginx_network
+
+networks:
+  nginx_network:
+    driver: bridge 
