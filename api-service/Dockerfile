@@ -9,7 +9,5 @@ COPY --chown=node:node ${API_SERVICE_VAR}/entrypoint.sh ./
 
 COPY --chown=node:node ${API_SERVICE_VAR}/package*.json ./
 
-RUN npm install
-
 COPY . .
 

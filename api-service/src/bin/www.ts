@@ -44,7 +44,7 @@ function normalizePort(val: string): string | number | false {
 
   if (port >= 0) {
     // port number
-    console.log("Listening on Api-Service port ", port);
+    console.log('Listening on Api-Service port ', port);
     return port;
   }
 
@@ -60,9 +60,8 @@ function onError(error: NodeJS.ErrnoException): void {
     throw error;
   }
 
-  const bind: string = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+  const bind: string =
+    typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
@@ -85,8 +84,7 @@ function onError(error: NodeJS.ErrnoException): void {
 
 function onListening(): void {
   const addr = server.address();
-  const bind: string = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr?.port;
+  const bind: string =
+    typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr?.port;
   debug('Listening on ' + bind);
 }

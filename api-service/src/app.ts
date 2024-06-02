@@ -1,8 +1,8 @@
 import createError from 'http-errors';
 import { Request, Response, NextFunction } from 'express';
 import logger from 'morgan';
-import express from "express"
-import setRoutePaths from "./routes"
+import express from 'express';
+import setRoutePaths from './routes';
 
 const app = express();
 
@@ -10,10 +10,10 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-setRoutePaths(app)
+setRoutePaths(app);
 
 // catch 404 and forward to error handler
-app.use(function(req: Request, res: Response, next: NextFunction) {
+app.use(function (req: Request, res: Response, next: NextFunction) {
   next(createError(404));
 });
 
@@ -22,11 +22,7 @@ interface ErrorObject {
   status?: number; // Assuming status is optional
 }
 // error handler
-app.use(function(
-  err: ErrorObject,
-  req: Request,
-  res: Response,
-): void {
+app.use(function (err: ErrorObject, req: Request, res: Response): void {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -36,4 +32,4 @@ app.use(function(
   res.render('error');
 });
 
-export default app
+export default app;

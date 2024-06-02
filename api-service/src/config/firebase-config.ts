@@ -1,24 +1,29 @@
-import { initializeApp, getApp } from "firebase/app"
-import { getFirestore, collection, addDoc, updateDoc } from "firebase/firestore"
-import { ref } from "firebase/database"
-import { firebaseConfig } from "./google-firebase-keys-dev"
-import { FirebaseOptions } from "../types"
-import admin from "firebase-admin"
+import { initializeApp, getApp } from 'firebase/app';
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  updateDoc
+} from 'firebase/firestore';
+import { ref } from 'firebase/database';
+import { firebaseConfig } from './google-firebase-keys-dev';
+import { FirebaseOptions } from '../types';
+import admin from 'firebase-admin';
 
-const app = initFirebaseApp(firebaseConfig)
-const appAdmin = initFirebaseAppAdmin(firebaseConfig)
-const db = getFirestore(app)
+const app = initFirebaseApp(firebaseConfig);
+const appAdmin = initFirebaseAppAdmin(firebaseConfig);
+const db = getFirestore(app);
 
 export function initFirebaseAppAdmin(config: FirebaseOptions) {
-    return admin.initializeApp(config)
+  return admin.initializeApp(config);
 }
 
 export function initFirebaseApp(config: FirebaseOptions) {
-    try {
-        return getApp()
-    } catch {
-        return initializeApp(config)
-    }
+  try {
+    return getApp();
+  } catch {
+    return initializeApp(config);
+  }
 }
 
-export { app, appAdmin, db, ref, collection, addDoc, updateDoc }
+export { app, appAdmin, db, ref, collection, addDoc, updateDoc };
