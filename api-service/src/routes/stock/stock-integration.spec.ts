@@ -1,6 +1,8 @@
 import request from 'supertest';
-import app from '../../app';
 import { getStockById } from '../../controllers/stockController';
+import express, { Express, NextFunction } from 'express';
+import setRoutePaths from '../../routes';
+import { setRedisClient } from '../../redis/setRedisClient';
 
 jest.mock('../../../src/controllers/stockController', () => ({
   getStockById: jest.fn(),
@@ -16,10 +18,31 @@ jest.mock('../../../src/middleware/check-token', () => ({
   checkValidToken: jest.fn((req, res, next) => next())
 }));
 
-beforeEach(() => {
-  jest.clearAllMocks();
+jest.mock('../../redis/setRedisClient', () => {
+  return {
+    setRedisClient: (app: Express) => {
+      return (req: Request, res: Response, next: NextFunction): void => {
+        (req as any).redisClient = {};
+        next();
+      };
+    }
+  };
 });
+
+const createTestApp = () => {
+  const app = express();
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: false }));
+  app.use(setRedisClient(app));
+  setRoutePaths(app);
+  return app;
+};
 describe('Stock Route', () => {
+  let app: Express;
+  beforeEach(() => {
+    jest.clearAllMocks();
+    app = createTestApp();
+  });
   it('should return stock data for valid request', async () => {
     const mockData = {
       hasData: true,
@@ -41,8 +64,8 @@ describe('Stock Route', () => {
       .set('pwd', `_test123`);
     const { accessToken } = responseToken.body as AuthResponse;
     const response = await request(app)
-      .get('/stock/')
-      // .query({ q: 'aapl.us' })
+      .get('/stock')
+      .query({ q: 'aapl.us' })
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
         email: 'abg@consoto.com',
@@ -68,7 +91,7 @@ describe('Stock Route', () => {
 
   it('should return 400 for missing query parameter', async () => {
     const mockData = {
-      error: 'sssInvalid or missing query parameter: q with stockId value'
+      error: 'Invalid or missing query parameter: q with stockId value'
     };
     (getStockById as jest.Mock).mockResolvedValue(mockData);
 
@@ -79,6 +102,7 @@ describe('Stock Route', () => {
     const { accessToken } = responseToken.body as AuthResponse;
     const response = await request(app)
       .get('/stock/')
+      // .query({ q: 'aapl.us' })
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
         email: 'abg@consoto.com',

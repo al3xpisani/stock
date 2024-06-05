@@ -1,7 +1,7 @@
 import { FirebaseOptions } from '../types';
 import 'dotenv/config';
 
-//This code was intentionally left only for testing by jobsity.com
+//This code was intentionally left only for testing
 export const firebaseConfig: FirebaseOptions = {
   apiKey: 'AIzaSyAuf7ohDCRnu_CU50dOF3PH_7HaIFfvfvk',
   authDomain: 'zeroqueue-30894.firebaseapp.com',

@@ -13,6 +13,19 @@ services:
       - ./api-service:/usr/src/app
     networks:
       - nginx_network
+    depends_on:
+      - nodejs-redis
+
+  nodejs-redis:
+    build: 
+      context: .
+      dockerfile: redis/Dockerfile
+    image: nodejs-redis
+    container_name: nodejs-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - nginx_network
   
   nodejs-stockservice:
     build: 

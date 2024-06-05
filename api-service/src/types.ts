@@ -1,3 +1,6 @@
+import { RedisClientType } from 'redis';
+import { Request } from 'express';
+
 export type AuthResponse = {
   isAuthenticated: boolean;
   accessToken: string | null;
@@ -36,6 +39,7 @@ export interface StockData {
   Date: string;
 }
 export interface TransformedData {
+  id?: string;
   name: string;
   symbol: string;
   open: number;
@@ -55,3 +59,17 @@ export type GroupedStock = {
   stock: string;
   times_requested: number;
 };
+
+export type RedisResponse = {
+  redisClientError: boolean;
+};
+
+export type RedisQueueSchema = {
+  id: string | undefined;
+  ticketName: string;
+  timestampIssue: string;
+};
+
+export interface CustomRequest extends Request {
+  redisClient?: RedisClientType;
+}

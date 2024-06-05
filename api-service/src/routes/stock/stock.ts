@@ -8,7 +8,8 @@ import {
 } from '../../controllers/stockController';
 import { checkValidToken } from '../../middleware/check-token';
 import httpStatus from 'http-status';
-import { UserInfo } from 'types';
+import { CustomRequest, UserInfo } from 'types';
+import { RedisClientType } from 'redis';
 
 const stockDiagram = express.Router();
 const midVerifyValidToken: RequestHandler = (
@@ -22,18 +23,25 @@ const midVerifyValidToken: RequestHandler = (
 stockDiagram.get(
   '/',
   midVerifyValidToken,
-  async (req: Request, res: Response) => {
+  async (req: CustomRequest, res: Response) => {
     try {
       const stockID = req.query.q as string;
       const userInfo: UserInfo = req.body;
-      const allStock = await getStockById(stockID, userInfo);
+      if (!stockID) {
+        return res.status(httpStatus.BAD_REQUEST).json({
+          error: 'Invalid or missing query parameter: q with stockId value'
+        });
+      }
+      const allStock = await getStockById(
+        stockID,
+        userInfo,
+        req.redisClient as RedisClientType
+      );
       const hasData = allStock?.hasData;
       if (!hasData) {
-        return res
-          .status(httpStatus.BAD_REQUEST)
-          .json({
-            error: 'Invalid or missing query parameter: q with stockId value'
-          });
+        return res.status(httpStatus.BAD_REQUEST).json({
+          error: 'Stock symbol not found'
+        });
       }
       return res.status(httpStatus.OK).json({
         status: 'Stock - Listing by ID ok.',

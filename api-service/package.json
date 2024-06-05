@@ -21,7 +21,8 @@
     "http-errors": "~1.6.3",
     "http-status": "^1.7.4",
     "morgan": "~1.9.1",
-    "papaparse": "^5.4.1"
+    "papaparse": "^5.4.1",
+    "redis": "^4.6.10"
   },
   "devDependencies": {
     "@babel/cli": "^7.24.6",
@@ -51,5 +52,4 @@
   "jest": {
     "testEnvironment": "node"
   }
-  
 }

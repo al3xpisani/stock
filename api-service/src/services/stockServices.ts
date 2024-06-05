@@ -12,10 +12,13 @@ import {
 } from '../types';
 import axios, { AxiosResponse } from 'axios';
 import { DocumentData } from 'firebase/firestore';
+import { sendTicketToQueue } from './queueStock';
+import { RedisClientType } from 'redis';
 
 export const getStockByIdService = async (
   fieldValue: string,
-  userInfo: object
+  userInfo: object,
+  redisClient: RedisClientType
 ) => {
   try {
     console.log(
@@ -38,6 +41,7 @@ export const getStockByIdService = async (
         stockDate: data.stockDate
       };
       await createStockService(transformedData, userInfo);
+      await sendTicketToQueue(redisClient, transformedData);
       return { hasData: true, status: transformedData };
     } else {
       return { hasData: false, status: 'No data found for given stock symbol' };

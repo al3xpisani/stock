@@ -4,10 +4,15 @@ import {
   getStockService,
   getStockServiceStats
 } from '../services/stockServices';
+import { RedisClientType } from 'redis';
 
-export const getStockById = async (fieldValue: string, userInfo: UserInfo) => {
+export const getStockById = async (
+  fieldValue: string,
+  userInfo: UserInfo,
+  redisClient: RedisClientType
+) => {
   try {
-    return await getStockByIdService(fieldValue, userInfo);
+    return await getStockByIdService(fieldValue, userInfo, redisClient);
   } catch (error) {
     if (error instanceof Error) {
       throw new Error('Error listing stocks: ' + error.message);

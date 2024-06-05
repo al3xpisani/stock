@@ -2,7 +2,7 @@
     <img src="https://media.licdn.com/dms/image/D4E0BAQETyObSEmZH-A/company-logo_200_200/0/1693956448491/jobsity_llc_logo?e=1723075200&v=beta&t=rGq4fY1cprFyIaSabim0_bgb-QLCbJUk6Es9dXuua1w"/>
 </div>
 
-# Node.js Challenge
+# Node.js Stock
 
 ## Description
 
@@ -16,9 +16,6 @@ The project consists of two separate services:
 
 * A user-facing API that will receive requests from registered users asking for quote information.
 * An internal stock service that queries external APIs to retrieve the requested quote information.
-
-## Minimum requirements
- - You will need to **record a video explaining the code** you created, the decisions you made, its functionality, and demonstrating the complete operation of the challenge. _Remember to show the execution from scratch, it should not be running beforehand._
 
 ### API service
 
@@ -84,8 +81,9 @@ The project consists of two separate services:
 ### Stock service
 
 * Assume this is an internal service, so requests to endpoints in this service don't need to be authenticated.
-* When a stock request is received, this service should query an external API to get the stock information. For this challenge, use this API: `https://stooq.com/q/l/?s={stock_code}&f=sd2t2ohlcvn&h&e=csv`.
-* Note that `{stock_code}` above is a parameter that should be replaced with the requested stock code.
+* When a stock request is received, this service should query an external API to get the stock information. 
+* The Stock Service will fetch stock data and will get back to api-service.
+* The api-service will persist data into firebase and Redis
 * You can see a list of available stock codes here: [https://stooq.com/t/?i=518](https://stooq.com/t/?i=518)
 
 ## Architecture
@@ -97,25 +95,6 @@ The project consists of two separate services:
 3. The stock service delegates the call to the external API, parses the response and returns the information back to the API service.
 4. The API service saves the response from the stock service in the database.
 5. The data is formatted and returned to the user.
-
-## Bonuses
-
-The following features are optional to implement, but if you do, you'll be ranked higher in our evaluation process.
-
-* Add unit tests for the services.
-* Add contract/integration tests for the API service.
-* Use JWT instead of basic authentication for endpoints.
-* Use containers to orchestrate the services.
-* Use OpenAPI/Swagger to document the API.
-* Add endpoint to reset user password sending an email with the new password.
-
-## How to run the project
-
-* Install dependencies: `cd api-service; npm install` and `cd stock-service; npm install`
-* Start the api service: `node api-service`
-* Start the stock service: `node stock-service`
-
-**Important:** If your implementation requires different steps to start the services (like starting a rabbitMQ consumer), also different endpoints o payload data for the endpoints, document them in the Readme!
 
 # NodeJs Stock Service
 
@@ -207,7 +186,10 @@ Run the first "token" API, which will return an access token to be used in other
 5. **Run getStockById rest Api in insomnia**:
  ![getStockById](https://i.ibb.co/wL2pzd5/image.png)
   ##### This moment the response data will be persisted in the Google Firebase GCP
+  ##### It also will persist the stock ticket into Redis
  ![Firebase: stock collection](https://i.ibb.co/m5ZjhfK/image.png)
+
+ ![Redis](https://i.ibb.co/tDXrpX5/image.png)
 
 6. **Run getHistory rest Api in insomnia**:
  ![getHistory](https://i.ibb.co/dkWZwrd/image.png)

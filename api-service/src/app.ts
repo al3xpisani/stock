@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import logger from 'morgan';
 import express from 'express';
 import setRoutePaths from './routes';
+import { setRedisClient } from './redis/setRedisClient';
 
 const app = express();
 
@@ -10,6 +11,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+app.use(setRedisClient(app));
 setRoutePaths(app);
 
 // catch 404 and forward to error handler
